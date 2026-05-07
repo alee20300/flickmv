@@ -554,13 +554,71 @@ h4 { font-size: 14px; }
 
 @media (max-width: 768px) {
   .flk-nav { display: none; }
-  .flk-header { padding: 16px 0; }
-  .flk-hero { padding: 48px 0; }
+  .flk-header { padding: 12px 0; }
+  .flk-container { padding: 0 16px; }
+  .flk-hero { padding: 32px 0; }
   .flk-hero h1 { font-size: clamp(32px, 10vw, 48px); }
-  .flk-hero p { font-size: 15px; }
-  .flk-movie-card { flex: 0 0 140px; }
-  .flk-movie-poster { width: 140px; height: 210px; }
-  .flk-section-title { font-size: 22px; flex-direction: column; align-items: flex-start; gap: 4px; }
+  .flk-hero p { font-size: 14px; padding: 0 8px; }
+  .flk-movie-card { flex: 0 0 130px; }
+  .flk-movie-poster { width: 130px; height: 195px; }
+  .flk-section-title { font-size: 20px; flex-direction: column; align-items: flex-start; gap: 4px; }
+  .flk-pricing { grid-template-columns: 1fr; max-width: 400px; }
+  .flk-hero-ctas { flex-direction: column; align-items: center; }
+  .flk-pills { gap: 8px; }
+  .flk-pill { font-size: 12px; padding: 6px 12px; }
+}
+
+@media (max-width: 480px) {
+  .flk-hero h1 { font-size: clamp(26px, 9vw, 38px); }
+  .flk-movie-card { flex: 0 0 110px; }
+  .flk-movie-poster { width: 110px; height: 165px; }
+  .flk-movie-title { font-size: 12px; }
+  .flk-rating { font-size: 10px; padding: 2px 6px; }
+  .flk-logo { font-size: 20px; }
+  .flk-cta { padding: 10px 18px; font-size: 13px; }
+}
+
+/* PWA Install Prompt */
+.pwa-install-banner {
+  position: fixed;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
+  z-index: 10001;
+  background: var(--fl-surface2, #16161d);
+  border: 1px solid rgba(147, 51, 234, 0.4);
+  border-radius: 16px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  backdrop-filter: blur(20px);
+  animation: slideUp 0.3s ease;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+
+.pwa-install-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: oklch(98% 0.005 270);
+}
+
+.pwa-install-btn {
+  background: linear-gradient(135deg, var(--fl-purple, #9333ea), var(--fl-pink, #ec4899));
+  color: #fff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 99px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+@media (display-mode: standalone) {
+  .pwa-install-banner { display: none !important; }
 }
 
 /* ── Modal Overlay ────────────────────────────────────── */
@@ -5347,4 +5405,48 @@ input:focus {
   .support-chat-hint {
     margin-right: 0;
   }
+}
+
+/* ── Mobile-First Responsive ──────────────────────────── */
+
+@media (max-width: 768px) {
+  .app { padding: var(--space-3); gap: var(--space-3); }
+  .topbar { padding: var(--space-2) var(--space-3); border-radius: 12px; min-height: 48px; }
+  .brand { font-size: 15px; }
+  .topbar-user { gap: 6px; }
+  .topbar .session { display: none; }
+  .sidebar { display: none; }
+  .sidebar-toggle { display: flex; }
+  .sidebar-open .sidebar { display: block; position: fixed; top: 56px; left: 8px; right: 8px; z-index: 50; max-height: calc(100vh - 80px); overflow-y: auto; }
+  .sidebar .nav { flex-direction: row; flex-wrap: wrap; gap: 4px; }
+  .sidebar .nav-link { font-size: 12px; padding: 6px 10px; }
+  .sidebar .nav-text { display: inline; }
+  .nav-icon { width: 22px; height: 22px; }
+  .nav-icon svg { width: 14px; height: 14px; }
+  .grid { grid-template-columns: 1fr !important; gap: var(--space-3) !important; }
+  .grid-2 { grid-template-columns: 1fr !important; }
+  .card { padding: var(--space-3); border-radius: 12px; }
+  h1 { font-size: 17px; }
+  h2 { font-size: 15px; }
+  h3 { font-size: 14px; }
+  .btn { padding: 10px 14px; font-size: 13px; }
+  .row { flex-direction: column; }
+  label { font-size: 12px; }
+  input, .select { padding: 8px 12px; font-size: 14px; }
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .modal-panel { margin: 12px; max-height: 85vh; }
+  .modal-overlay { padding: 8px; }
+  .toast-stack { bottom: 8px; right: 8px; left: 8px; }
+}
+
+@media (max-width: 480px) {
+  .app { padding: var(--space-2); gap: var(--space-2); }
+  .topbar { padding: var(--space-1) var(--space-2); border-radius: 10px; }
+  .brand { font-size: 14px; }
+  .topbar-actions { gap: 4px; }
+  .topbar-actions .btn { padding: 6px 10px; font-size: 11px; }
+  .card { padding: var(--space-2); border-radius: 10px; }
+  h1 { font-size: 16px; }
+  .btn { width: 100%; }
+  .btn.small { width: auto; }
 }

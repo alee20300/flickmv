@@ -601,6 +601,13 @@ export default function App() {
   const plansRef = useRef(plans);
   const unlimitedRef = useRef(unlimitedUsers);
   const tagsRef = useRef(userTags);
+  const [showPwaInstall, setShowPwaInstall] = useState(false);
+
+  useEffect(() => {
+    const handler = () => setShowPwaInstall(true);
+    window.addEventListener("beforeinstallprompt", handler, { once: true });
+    return () => window.removeEventListener("beforeinstallprompt", handler);
+  }, []);
   const contactsRef = useRef(userContacts);
   const movieRequestsRef = useRef(movieRequests);
   const playbackDisableAttemptedRef = useRef(new Set());
@@ -2779,6 +2786,14 @@ export default function App() {
 
         {!session && sessionReady && (
           <div className="flk">
+            {showPwaInstall && (
+              <div className="pwa-install-banner">
+                <span className="pwa-install-text">Install FlickMV on your phone for quick access</span>
+                <button className="pwa-install-btn" onClick={() => { window.__pwaInstall?.(); setShowPwaInstall(false); }}>
+                  Install
+                </button>
+              </div>
+            )}
             <div className="flk-container">
               <header className="flk-header">
                 <a href="#hero" className="flk-logo">FlickMV</a>
