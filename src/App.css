@@ -6,7 +6,7 @@
 .app {
   max-width: 1400px;
   margin: 0 auto;
-  padding: var(--space-5) var(--space-4) var(--space-7);
+  padding: max(var(--space-5), env(safe-area-inset-top)) var(--space-4) max(var(--space-7), env(safe-area-inset-bottom, 20px));
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -29,7 +29,7 @@
   min-height: var(--topbar-height);
   background: rgba(16, 16, 19, 0.8);
   border: 1px solid var(--fl-border);
-  padding: var(--space-3) var(--space-4);
+  padding: max(var(--space-3), env(safe-area-inset-top)) var(--space-4) var(--space-3);
   border-radius: var(--fl-radius);
   backdrop-filter: blur(16px);
   box-shadow: var(--shadow-1);
@@ -239,6 +239,8 @@ h4 { font-size: 14px; }
   color: oklch(98% 0.005 270);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 .flk-container {
@@ -581,7 +583,7 @@ h4 { font-size: 14px; }
 /* PWA Install Prompt */
 .pwa-install-banner {
   position: fixed;
-  bottom: 16px;
+  bottom: max(16px, env(safe-area-inset-bottom));
   left: 16px;
   right: 16px;
   z-index: 10001;
