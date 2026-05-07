@@ -1,0 +1,50 @@
+name: Deploy — Staging (dev)
+on:
+  push:
+    branches: [dev]
+
+jobs:
+  deploy-staging:
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+
+      - uses: supabase/setup-cli@v1
+        with: { version: latest }
+
+      # ── Database Migrations ─────────────────────────
+      - name: Push migrations → Staging DB
+        run: |
+          supabase link --project-ref ${{ secrets.SUPABASE_PROJECT_REF_STAGING }}
+          supabase db push
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+
+      # ── Edge Functions ─────────────────────────────
+      - name: Deploy Edge Functions → Staging
+        run: |
+          for fn in emby-auth register-otp approve-payment approve-media policy-sync fetch-trending; do
+            supabase functions deploy $fn --project-ref ${{ secrets.SUPABASE_PROJECT_REF_STAGING }}
+          done
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+
+      # ── Frontend Build ─────────────────────────────
+      - name: Build frontend
+        run: npm ci && npx vite build
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL_STAGING }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY_STAGING }}
+
+      # ── Deploy to Vercel (Staging) ─────────────────
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: --confirm

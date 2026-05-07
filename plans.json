@@ -1,0 +1,21 @@
+[
+  {
+    "id": "93431369-9b78-43f6-b704-5bbe711dba44",
+    "durationDays": "90",
+    "name": "MovieFlixHD Premium ~11% off",
+    "price": "400",
+    "currency": "MVR",
+    "status": "Active",
+    "createdAt": "2026-02-09T21:14:48.834Z"
+  },
+  {
+    "id": "76ead8c0-3d66-40b9-92ab-9a61ea8eb97c",
+    "name": "Movieflix HD Premium",
+    "duration": "30",
+    "price": 150,
+    "currency": "MVR",
+    "status": "Active",
+    "createdAt": "2026-02-09T19:49:51.600Z",
+    "durationDays": 30
+  }
+]
