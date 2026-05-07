@@ -2930,9 +2930,10 @@ export default function App() {
                       }
                     }
                   }}
-                  style={{background:"none",border:"none",color:"oklch(75% 0.02 270)",cursor:"pointer",fontSize:12,fontFamily:"inherit",marginTop:8}}
+                  className="pwa-install-btn"
+                  style={{ marginTop: 12 }}
                 >
-                  Test Notification
+                  &#128276; Test Notification
                 </button>
               </footer>
             </div>

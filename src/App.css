@@ -632,12 +632,13 @@ h4 { font-size: 14px; }
 }
 
 .pwa-install-btn {
+  display: inline-block;
   background: linear-gradient(135deg, var(--fl-purple, #9333ea), var(--fl-pink, #ec4899));
   color: #fff;
   border: none;
-  padding: 8px 18px;
+  padding: 12px 24px;
   border-radius: 99px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
