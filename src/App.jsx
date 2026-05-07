@@ -2917,6 +2917,23 @@ export default function App() {
 
               <footer className="flk-footer">
                 <p>&copy; {new Date().getFullYear()} FlickMV</p>
+                <button
+                  onClick={async () => {
+                    if (!("Notification" in window)) return alert("Notifications not supported");
+                    const perm = await Notification.requestPermission();
+                    if (perm === "granted") {
+                      const reg = await navigator.serviceWorker?.ready;
+                      if (reg) {
+                        reg.showNotification("FlickMV", { body: "Test notification works!", icon: "/movieflix.svg", vibrate: [200,100,200] });
+                      } else {
+                        new Notification("FlickMV", { body: "Test notification works!" });
+                      }
+                    }
+                  }}
+                  style={{background:"none",border:"none",color:"oklch(75% 0.02 270)",cursor:"pointer",fontSize:12,fontFamily:"inherit",marginTop:8}}
+                >
+                  Test Notification
+                </button>
               </footer>
             </div>
           </div>
