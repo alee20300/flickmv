@@ -1,0 +1,36 @@
+name: CI/CD — Coolify
+
+on:
+  push:
+    branches: [main, dev]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+
+      - name: Install & build
+        run: npm ci && npx vite build
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+
+      - name: Build Docker image
+        run: docker build -t flickmv:${{ github.sha }} .
+
+      - name: Push to Coolify registry (optional)
+        run: |
+          # If using Coolify's built-in registry or Docker Hub
+          # docker tag flickmv:${{ github.sha }} registry.example.com/flickmv:latest
+          # docker push registry.example.com/flickmv:latest
+          echo "Deploy via Coolify webhook or Docker registry push"
+
+      - name: Trigger Coolify deploy (webhook)
+        run: |
+          if [ -n "${{ secrets.COOLIFY_DEPLOY_WEBHOOK }}" ]; then
+            curl -X POST "${{ secrets.COOLIFY_DEPLOY_WEBHOOK }}"
+          fi
