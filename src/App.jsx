@@ -2919,15 +2919,32 @@ export default function App() {
                 <p>&copy; {new Date().getFullYear()} FlickMV</p>
                 <button
                   onClick={async () => {
-                    if (!("Notification" in window)) return alert("Notifications not supported");
-                    const perm = await Notification.requestPermission();
-                    if (perm === "granted") {
-                      const reg = await navigator.serviceWorker?.ready;
-                      if (reg) {
-                        reg.showNotification("FlickMV", { body: "Test notification works!", icon: "/movieflix.svg", vibrate: [200,100,200] });
-                      } else {
-                        new Notification("FlickMV", { body: "Test notification works!" });
+                    try {
+                      if (!("Notification" in window)) {
+                        alert("Notifications not supported in this browser");
+                        return;
                       }
+                      const perm = await Notification.requestPermission();
+                      if (perm !== "granted") {
+                        alert("Notification permission denied. Enable in browser settings.");
+                        return;
+                      }
+                      const reg = await navigator.serviceWorker?.ready;
+                      if (reg?.showNotification) {
+                        await reg.showNotification("FlickMV", {
+                          body: "Notification test successful!",
+                          icon: "/movieflix.svg",
+                          vibrate: [200, 100, 200],
+                          tag: "test"
+                        });
+                      } else {
+                        new Notification("FlickMV", {
+                          body: "Notification test successful!",
+                          icon: "/movieflix.svg"
+                        });
+                      }
+                    } catch(e) {
+                      alert("Error: " + e.message);
                     }
                   }}
                   className="pwa-install-btn"
