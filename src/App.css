@@ -282,14 +282,37 @@ h4 { font-size: 14px; }
   display: inline-block;
   background: linear-gradient(45deg, oklch(65% 0.22 290), oklch(70% 0.2 340));
   color: oklch(98% 0.005 270);
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
-  padding: 12px 24px;
+  padding: 10px 20px;
   border-radius: 99px;
   border: none;
   cursor: pointer;
   font-family: inherit;
   transition: opacity 0.2s;
+}
+
+.flk-hero {
+  text-align: center;
+  padding: 60px 0 40px;
+}
+
+.flk-hero h1 {
+  font-weight: 800;
+  font-size: clamp(48px, 10vw, 90px);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin: 0 0 12px;
+  color: oklch(98% 0.005 270);
+}
+
+.flk-section-title {
+  font-weight: 700;
+  font-size: 28px;
+  margin: 48px 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .flk-cta:hover { opacity: 0.9; }
@@ -577,7 +600,9 @@ h4 { font-size: 14px; }
   .flk-movie-title { font-size: 12px; }
   .flk-rating { font-size: 10px; padding: 2px 6px; }
   .flk-logo { font-size: 20px; }
-  .flk-cta { padding: 10px 18px; font-size: 13px; }
+  .flk-cta { padding: 8px 16px; font-size: 12px; }
+  .flk-hero { padding: 20px 0 28px; }
+  .flk-section-title { margin: 32px 0 16px; }
 }
 
 /* PWA Install Prompt */
