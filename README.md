@@ -1,93 +1,46 @@
-# MovieFlix Dashboard (Server-First)
+# FlickMV
 
-This app now runs fully on the server (no Mac build/push/pull workflow required for runtime).
+A media dashboard for managing subscriptions, content requests, and approvals — built on React, Supabase, and a lightweight Node proxy.
 
-## Runtime Model
+## Stack
 
-- Backend: `node server/app.js`
-- Frontend build: `esbuild` via `scripts/build.mjs`
-- Served assets: `dist/` (served by `server/app.js`)
+- **Frontend** — React 19, React Router 7, Vite
+- **Backend** — Supabase (auth, PostgreSQL, Edge Functions)
+- **Proxy** — Node 22 (`production-server.mjs`) — passes API calls to Emby, Jellyseerr, Sonarr, Radarr
 
-## One Command Deploy (Recommended)
-
-```bash
-cd ~/movieflixdash
-bash deploy.sh
-```
-
-`deploy.sh` does:
-1. `git pull`
-2. `./run.sh`
-3. prints public health check
-
-## Local Server Run Script
+## Quick Start (local dev)
 
 ```bash
-cd ~/movieflixdash
-./run.sh
+cp .env.example .env   # fill in Supabase + service URLs
+supabase start         # start local Supabase (requires Docker)
+npm install
+npm run dev            # http://localhost:5173
 ```
 
-`run.sh` does:
-1. Ensures Node/NPM path
-2. Stops previous app process
-3. Builds frontend (`npm run build`)
-4. Starts backend in background on `PORT` (default `5002`)
-5. Optional Telegram bot with `RUN_TELEGRAM=1`
+## Deployment
 
-## Manual Restart (If Needed)
+See **[DEPLOY.md](./DEPLOY.md)** for full instructions covering:
+
+- [Vercel + Supabase Cloud](./DEPLOY.md#option-a-vercel--supabase-cloud) (managed hosting)
+- [Coolify self-hosted Docker](./DEPLOY.md#option-b-coolify-self-hosted)
+- [Manual / bare-metal](./DEPLOY.md#option-c-manual--bare-metal)
+
+## CI/CD
+
+GitHub Actions workflows live in `.github/workflows/`:
+
+| Workflow | Trigger | Action |
+|----------|---------|--------|
+| `ci.yml` | PR → `main` / `dev` | Lint + build check |
+| `deploy-prod.yml` | Push → `main` | DB migrations + Edge Functions + Vercel prod deploy |
+| `deploy-dev.yml` | Push → `dev` | DB migrations + Edge Functions + Vercel staging deploy |
+| `deploy-coolify.yml` | Push → `main` / `dev` | Docker build + Coolify webhook |
+
+## Scripts
 
 ```bash
-cd ~/movieflixdash
-pkill -f "/home/alee20300/movieflixdash/server/app.js" || true
-nohup env PORT=5002 /home/alee20300/.nvm/versions/node/v24.14.0/bin/node /home/alee20300/movieflixdash/server/app.js > /tmp/movieflix-app.log 2>&1 </dev/null &
-disown
+npm run dev     # Vite dev server
+npm run build   # Production build → dist/
+npm run lint    # ESLint
+npm start       # production-server.mjs (serves dist/ + proxies /api/*)
 ```
-
-## Health Checks
-
-```bash
-curl -sI http://127.0.0.1:5002/ | head -n 1
-curl -sI https://movieflixhd.cloud/ | head -n 1
-```
-
-## Logs
-
-```bash
-tail -n 100 /tmp/movieflix-app.log
-tail -n 100 /tmp/movieflix-error.log
-tail -n 100 /tmp/cloudflared.log
-```
-
-## Cloudflare Tunnel
-
-Start tunnel:
-
-```bash
-nohup ~/bin/cloudflared tunnel run movieflix > /tmp/cloudflared.log 2>&1 &
-```
-
-Check tunnel process:
-
-```bash
-pgrep -a -f "cloudflared tunnel run movieflix"
-```
-
-## Data Safety Rules
-
-Runtime data lives on server and must not be overwritten by code deploys:
-
-- `settings.json`
-- `subscriptions.json`
-- `registrations.json`
-- `plans.json`
-- `media-requests.json`
-- `slips.json`
-- `user-chats.json`
-- `user-contacts.json`
-- `user-tags.json`
-- `unlimited-users.json`
-- `telegram-state.json`
-- `slips/`
-- `emby-guide/`
-
-Before major infra changes, create a backup tar under `backups/`.
